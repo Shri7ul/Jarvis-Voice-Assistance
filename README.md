@@ -70,7 +70,8 @@ This project uses speech recognition and text-to-speech (TTS) to provide a hands
 
 **InHuman**
 
-Inspired by Tony Stark's JARVIS
+Inspired by Tony Stark's JARVIS  
+Instructor Bappy bhai
 
 
 ### 📜 License
