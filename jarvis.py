@@ -25,6 +25,7 @@ logging.basicConfig(
 
 #Activate the speech engine
 engine = pyttsx3.init("sapi5")
+engine.setProperty("rate", 150)  # Speed percent (can go over 100)
 voices = engine.getProperty("voices")
 engine.setProperty("voice", voices[1].id)  # Select the first voice
 
@@ -91,7 +92,7 @@ while True:
     query = takeCommand().lower()
     print(query)
     if "your name" in query:
-        speak("I am your assistant.")
+        speak("I am Cutie.")
         logging.info("User asked for assistant's name.")
 
     elif "time" in query:
@@ -114,6 +115,22 @@ while True:
         webbrowser.open("https://www.google.com")
         speak("Opening Google.")
         logging.info("User requested to open Google.")
+    elif "open calculator" in query:
+        subprocess.Popen('calc.exe')
+        speak("Opening Calculator.")
+        logging.info("User requested to open Calculator.")
+    elif "open notepad" in query:
+        subprocess.Popen('notepad.exe')
+        speak("Opening Notepad.")
+        logging.info("User requested to open Notepad.")
+    elif "open youtube" in query:
+        webbrowser.open(f"https://www.youtube.com/results?search_query={query}")
+        speak("Opening YouTube.")
+        logging.info("User requested to open YouTube.")
+    elif "command prompt" in query:
+        subprocess.Popen('cmd.exe')
+        speak("Opening Command Prompt.")
+        logging.info("User requested to open Command Prompt.")
 
 
 speak("Hello, I am your assistant. How can I help you today?")
