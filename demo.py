@@ -1,3 +1,12 @@
 import speech_recognition as sr
-mic_list = sr.Microphone.list_microphone_names()
-print(mic_list)
+
+r = sr.Recognizer()
+with sr.Microphone() as source:
+    print("Listening...")
+    audio = r.listen(source)
+
+try:
+    text = r.recognize_google(audio)
+    print("You said:", text)
+except:
+    print("Could not recognize.")

@@ -133,5 +133,5 @@ while True:
         logging.info("User requested to open Command Prompt.")
 
 
-speak("Hello, I am your assistant. How can I help you today?")
+
 
