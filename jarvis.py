@@ -7,6 +7,12 @@ import webbrowser
 import wikipedia
 import random
 import subprocess
+import google.generativeai as genai
+from dotenv import load_dotenv
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 
 # Configure logging
 LOG_DIR = "logs"
@@ -55,8 +61,10 @@ def takeCommand():
     r=sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
-        r.pause_threshold = 1
-        audio = r.listen(source)    
+        r.adjust_for_ambient_noise(source, duration=0.3)  # noise handling
+        r.pause_threshold = 0.8
+        r.energy_threshold = 300  
+        audio = r.listen(source, timeout=5, phrase_time_limit=7)
     try:
         print("Recognizing...")
         query = r.recognize_google(audio, language='en-in')
@@ -68,6 +76,16 @@ def takeCommand():
         return "None"   
     
     return query
+
+#AI intregated here
+def gemini_response(user_text):
+    genai.configure(api_key=GEMINI_API_KEY)
+    model = genai.GenerativeModel("gemini-2.5-flash")
+
+    prompt = f"Answer shortly:\n{user_text}\nAnswer:"
+    response = model.generate_content(prompt)
+    return response.text
+
 
 def greeting():
     """This function greets the user based on the time of day.
@@ -100,14 +118,14 @@ while True:
         speak(f"The time is {strTime}")
         logging.info("User asked for current time.")
 
-    elif "exit" in query or "quit" in query:
+    elif "exit" in query or "quit" in query or "goodbye" in query:
         speak("Goodbye!")
         break
     elif "how are you" in query:
         speak("I am fine, thank you. How can I assist you today?")
         logging.info("User asked how the assistant is doing.")
 
-    elif "whom created you" in query or "who made you" in query:
+    elif "who created you" in query or "who made you" in query:
         speak("I was created by InHuman.")
         logging.info("User asked about the assistant's creator.")
 
@@ -131,6 +149,11 @@ while True:
         subprocess.Popen('cmd.exe')
         speak("Opening Command Prompt.")
         logging.info("User requested to open Command Prompt.")
+    else:
+        response = gemini_response(query)
+        speak(response)
+        logging.info("Generated AI response for user query.")
+
 
 
 
